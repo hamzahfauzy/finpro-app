@@ -33,15 +33,21 @@ class TransaksiController extends BaseCrudController
                 'relation' => \App\Models\Paket::class,
                 'display' => 'nama',
             ],
-            'jumlah' => [
-                'label' => 'Jumlah',
-                'type' => 'number'
-            ],
             'id_rekening' => [
                 'label' => 'Rekening',
                 'type' => 'select',
                 'relation' => \App\Models\Rekening::class,
                 'display' => 'nama',
+            ],
+            'target_rekening' => [
+                'label' => 'Target Rekening',
+                'type' => 'select',
+                'relation' => \App\Models\Rekening::class,
+                'display' => 'nama',
+            ],
+            'jumlah' => [
+                'label' => 'Jumlah',
+                'type' => 'number'
             ],
             'deskripsi' => [
                 'label' => 'Deskripsi',
@@ -147,6 +153,12 @@ class TransaksiController extends BaseCrudController
                 'relation' => \App\Models\Rekening::class,
                 'display' => 'nama',
             ],
+            'target_rekening' => [
+                'label' => 'Target Rekening',
+                'type' => 'select',
+                'relation' => \App\Models\Rekening::class,
+                'display' => 'nama',
+            ],
             'jumlah' => [
                 'label' => 'Jumlah',
                 'type' => 'number'
@@ -207,6 +219,7 @@ class TransaksiController extends BaseCrudController
         $payload = $request->except('tipe','_token');
         $payload['kategori'] = $request->tipe;
         $payload['id_perusahaan'] = null;
+        $additionalTransactions = [];
 
         if(isset($payload['id_paket']))
         {
@@ -222,6 +235,26 @@ class TransaksiController extends BaseCrudController
         if($request->tipe == 'kmk')
         {
             $payload['tipe_transaksi'] = 'masuk';
+            $target_rekening = $payload['target_rekening'];
+            unset($payload['target_rekening']);
+
+            $additionalTransactions = [
+                [
+                    ...$payload,
+                    'jumlah' => $payload['jumlah'],
+                    'tipe_transaksi' => 'keluar',
+                    'kategori' => 'transfer'
+                ],
+                [
+                    ...$payload,
+                    'id_rekening' => $target_rekening,
+                    'jumlah' => $payload['jumlah'],
+                    'tipe_transaksi' => 'masuk',
+                    'kategori' => 'transfer'
+                ],
+            ];
+
+            
         }
         
         if($request->tipe == 'transfer')
@@ -267,18 +300,40 @@ class TransaksiController extends BaseCrudController
             $payload['id_rekening'] = $tujuan_rekening;
         }
 
+        
         if($request->tipe == 'pendapatan')
         {
             $payload['tipe_transaksi'] = 'masuk';
             if($payload['potongan_kmk'])
             {
                 $jumlah_potongan = $payload['potongan_kmk'];
+                $target_rekening = $payload['target_rekening'];
+                unset($payload['target_rekening']);
                 unset($payload['potongan_kmk']);
-                Transaksi::create([
-                    ...$payload,
-                    'jumlah' => $jumlah_potongan,
-                    'tipe' => 'keluar'
-                ]);
+
+                $additionalTransactions = [
+                    [
+                        ...$payload,
+                        'jumlah' => $jumlah_potongan,
+                        'tipe_transaksi' => 'keluar',
+                        'kategori' => 'kmk'
+                    ],
+                    [
+                        ...$payload,
+                        'id_rekening' => $payload['id_rekening'],
+                        'jumlah' => $payload['jumlah'] - $jumlah_potongan,
+                        'tipe_transaksi' => 'keluar',
+                        'kategori' => 'transfer'
+                    ],
+                    [
+                        ...$payload,
+                        'id_rekening' => $target_rekening,
+                        'jumlah' => $payload['jumlah'] - $jumlah_potongan,
+                        'tipe_transaksi' => 'masuk',
+                        'kategori' => 'transfer'
+                    ]
+                ];
+                
             }
         }
 
@@ -289,11 +344,19 @@ class TransaksiController extends BaseCrudController
                 'kategori' => 'modal',
                 'tipe_transaksi' => 'keluar'
             ]);
-            
+
             $payload['tipe_transaksi'] = 'masuk';
         }
 
         Transaksi::create($payload);
+
+        if($additionalTransactions)
+        {
+            foreach($additionalTransactions as $data)
+            {
+                Transaksi::create($data);
+            }
+        }
 
         return redirect()->route('transaksi.index')->with('success', 'Data berhasil disimpan');
     }
