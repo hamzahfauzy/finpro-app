@@ -57,7 +57,7 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">
-                                            <b>- {{$paket['nama']}}</b>
+                                            <b>- {{substr($paket['nama'],0,50) . '...'}}</b>
                                         </div>
                                     </td>
                                     @foreach($bulan as $i => $b)
@@ -155,7 +155,7 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">
-                                            <b>- {{$paket['nama']}}</b>
+                                            <b>- {{substr($paket['nama'],0,50) . '...'}}</b>
                                         </div>
                                     </td>
                                     @foreach($bulan as $i => $b)
@@ -253,7 +253,7 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">
-                                            <b>- {{$paket['nama']}}</b>
+                                            <b>- {{substr($paket['nama'],0,50) . '...'}}</b>
                                         </div>
                                     </td>
                                     @foreach($bulan as $i => $b)
