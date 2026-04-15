@@ -18,7 +18,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->string('nama');
-            $table->enum('tipe', ['escrow', 'giro']);
+            $table->enum('tipe', ['escrow', 'giro','induk']);
             $table->bigInteger('saldo')->default(0);
             $table->string('nomor_rekening')->nullable();
             $table->string('nama_rekening')->nullable();

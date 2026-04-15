@@ -28,7 +28,8 @@ class Rekening extends Model
             'type' => 'select',
             'options' => [
                 'escrow' => 'Escrow',
-                'giro' => 'Giro'
+                'giro' => 'Giro',
+                'induk' => 'Induk',
             ]
         ],
         'saldo' => [
@@ -62,5 +63,15 @@ class Rekening extends Model
     public function transaksi()
     {
         return $this->hasMany(Transaksi::class, 'id_rekening');
+    }
+
+    public function transaksiMasuk()
+    {
+        return $this->transaksi()->where('tipe_transaksi', 'masuk');
+    }
+    
+    public function transaksiKeluar()
+    {
+        return $this->transaksi()->where('tipe_transaksi', 'keluar');
     }
 }

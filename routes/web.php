@@ -40,6 +40,9 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('laporan')->name('laporan.')->group(function(){
             Route::get('index', [LaporanController::class, 'index'])->name('index');
+            Route::get('kas-induk', [LaporanController::class, 'kasInduk'])->name('kas-induk');
+            Route::get('kas-operasional', [LaporanController::class, 'kasOperasional'])->name('kas-operasional');
+            Route::get('cash-flow', [LaporanController::class, 'cashflow'])->name('cash-flow');
             Route::get('saldo-perusahaan', [LaporanController::class, 'saldoPerusahaan'])->name('saldo-perusahaan');
             Route::get('saldo-kegiatan', [LaporanController::class, 'saldoKegiatan'])->name('saldo-kegiatan');
             Route::get('laporan-kegiatan', [LaporanController::class, 'laporanKegiatan'])->name('laporan-kegiatan');

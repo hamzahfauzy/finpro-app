@@ -78,6 +78,21 @@ return [
                 'route' => 'laporan.index',
                 'routePrefix' => 'laporan.',
             ],
+            [
+                'label' => 'Kas Induk',
+                'route' => 'laporan.kas-induk',
+                'routePrefix' => 'laporan.',
+            ],
+            [
+                'label' => 'Kas Operasional',
+                'route' => 'laporan.kas-operasional',
+                'routePrefix' => 'laporan.',
+            ],
+            [
+                'label' => 'Cash Flow',
+                'route' => 'laporan.cash-flow',
+                'routePrefix' => 'laporan.',
+            ],
             // [
             //     'label' => 'Saldo Perusahaan',
             //     'route' => 'laporan.saldo-perusahaan',
