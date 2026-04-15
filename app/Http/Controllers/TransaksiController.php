@@ -283,8 +283,14 @@ class TransaksiController extends BaseCrudController
         }
 
         if($request->tipe == 'kewajiban')
-        {
-            $payload['tipe_transaksi'] = 'keluar';
+        {   
+            Transaksi::create([
+                ...$payload,
+                'kategori' => 'modal',
+                'tipe_transaksi' => 'keluar'
+            ]);
+            
+            $payload['tipe_transaksi'] = 'masuk';
         }
 
         Transaksi::create($payload);

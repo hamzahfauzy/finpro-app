@@ -50,6 +50,7 @@ class FinanceService
                 ")
             )
             ->groupBy('id_rekening')
+            ->where('kategori', '<>', 'kewajiban')
             ->get();
     }
 

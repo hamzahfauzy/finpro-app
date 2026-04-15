@@ -227,7 +227,27 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($saldo as $tipe => $kategori)
+                            @forelse($saldo as $tipe => $listKategori)
+                                @foreach ($listKategori as $kategori)
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            <b>{{ucfirst($tipe) .' '. $kategori['nama']}}</b>
+                                        </div>
+                                    </td>
+                                    @foreach($bulan as $i => $b)
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                        <span class="font-mono font-bold">
+                                            Rp {{ number_format($kategori['bulan'][$i], 0, ',', '.') }}
+                                        </span>
+                                    </td>
+                                    @endforeach
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                        <span class="font-mono font-bold">
+                                            Rp {{ number_format(array_sum($kategori['bulan']), 0, ',', '.') }}
+                                        </span>
+                                    </td>
+                                </tr>
 
                                 @foreach($kategori['paket'] as $paket)
                                 <tr class="hover:bg-gray-50 transition">
@@ -250,7 +270,8 @@
                                     </td>
                                 </tr>
                                 @endforeach
-                                
+
+                                @endforeach
                             @empty
                                 <tr>
                                     <td colspan="13" class="px-6 py-10 text-center text-gray-500 italic">

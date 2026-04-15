@@ -43,6 +43,7 @@ class LaporanController extends Controller
                     DB::raw('SUM(CASE WHEN tipe_transaksi = "keluar" THEN jumlah ELSE 0 END) as keluar')
                 )
                 ->where('id_rekening', $rek->id)
+                ->where('kategori', '<>', 'kewajiban')
                 ->groupBy('bulan')
                 ->get()
                 ->keyBy('bulan');
@@ -110,6 +111,7 @@ class LaporanController extends Controller
                     DB::raw('SUM(CASE WHEN tipe_transaksi = "keluar" THEN jumlah ELSE 0 END) as keluar')
                 )
                 ->where('id_rekening', $rek->id)
+                ->where('kategori', '<>', 'kewajiban')
                 ->groupBy('bulan')
                 ->get()
                 ->keyBy('bulan');
@@ -157,7 +159,7 @@ class LaporanController extends Controller
 
     function cashflow()
     {
-        $rekening = Rekening::where('tipe','induk')->pluck('id');
+        $rekening = Rekening::where('tipe','giro')->pluck('id');
         $raw = DB::table('transaksi as t')
             ->leftJoin('paket as p', 'p.id', '=', 't.id_paket')
             ->leftJoin('kategori_paket as kp', 'kp.id', '=', 'p.id_kategori')
@@ -178,8 +180,9 @@ class LaporanController extends Controller
                 'p.id',
                 'bulan'
             )
-            ->whereNotIn('t.kategori', ['transfer','kmk'])
-            ->whereNotIn('t.id_rekening', $rekening)
+            ->whereNotIn('t.kategori', ['transfer','kmk','kewajiban'])
+            ->whereIn('t.id_rekening', $rekening)
+            ->whereNull('t.deleted_at')
             ->get();
 
         $data = [
@@ -217,11 +220,16 @@ class LaporanController extends Controller
         $saldo = [];
 
         foreach ($data['masuk'] as $kategori => $list) {
+
             foreach ($list as $katId => $kat) {
 
                 // init kategori
-                if (!isset($saldo[$katId])) {
-                    $saldo[$katId] = [
+                if (!isset($saldo[$kategori])) {
+                    $saldo[$kategori] = [];
+                }
+                
+                if (!isset($saldo[$kategori][$katId])) {
+                    $saldo[$kategori][$katId] = [
                         'nama' => $kat['nama'],
                         'bulan' => array_fill(1, 12, 0),
                         'paket' => []
@@ -230,31 +238,36 @@ class LaporanController extends Controller
 
                 // kategori level
                 foreach ($kat['bulan'] as $bulan => $val) {
-                    $saldo[$katId]['bulan'][$bulan] += $val;
+                    $saldo[$kategori][$katId]['bulan'][$bulan] += $val;
                 }
 
                 // paket level
                 foreach ($kat['paket'] as $paketId => $paket) {
 
-                    if (!isset($saldo[$katId]['paket'][$paketId])) {
-                        $saldo[$katId]['paket'][$paketId] = [
+                    if (!isset($saldo[$kategori][$katId]['paket'][$paketId])) {
+                        $saldo[$kategori][$katId]['paket'][$paketId] = [
                             'nama' => $paket['nama'],
                             'bulan' => array_fill(1, 12, 0),
                         ];
                     }
 
                     foreach ($paket['bulan'] as $bulan => $val) {
-                        $saldo[$katId]['paket'][$paketId]['bulan'][$bulan] += $val;
+                        $saldo[$kategori][$katId]['paket'][$paketId]['bulan'][$bulan] += $val;
                     }
                 }
             }
         }
 
         foreach ($data['keluar'] as $kategori => $list) {
+
             foreach ($list as $katId => $kat) {
 
-                if (!isset($saldo[$katId])) {
-                    $saldo[$katId] = [
+                if (!isset($saldo[$kategori])) {
+                    $saldo[$kategori] = [];
+                }
+
+                if (!isset($saldo[$kategori][$katId])) {
+                    $saldo[$kategori][$katId] = [
                         'nama' => $kat['nama'],
                         'bulan' => array_fill(1, 12, 0),
                         'paket' => []
@@ -263,21 +276,21 @@ class LaporanController extends Controller
 
                 // kategori level
                 foreach ($kat['bulan'] as $bulan => $val) {
-                    $saldo[$katId]['bulan'][$bulan] -= $val;
+                    $saldo[$kategori][$katId]['bulan'][$bulan] -= $val;
                 }
 
                 // paket level
                 foreach ($kat['paket'] as $paketId => $paket) {
 
-                    if (!isset($saldo[$katId]['paket'][$paketId])) {
-                        $saldo[$katId]['paket'][$paketId] = [
+                    if (!isset($saldo[$kategori][$katId]['paket'][$paketId])) {
+                        $saldo[$kategori][$katId]['paket'][$paketId] = [
                             'nama' => $paket['nama'],
                             'bulan' => array_fill(1, 12, 0),
                         ];
                     }
 
                     foreach ($paket['bulan'] as $bulan => $val) {
-                        $saldo[$katId]['paket'][$paketId]['bulan'][$bulan] -= $val;
+                        $saldo[$kategori][$katId]['paket'][$paketId]['bulan'][$bulan] -= $val;
                     }
                 }
             }
@@ -322,15 +335,15 @@ class LaporanController extends Controller
             'total' => 0
         ];
 
-        foreach ($saldo as $katId => $kat) {
+        foreach ($saldo as $kategori => $list) {
+            foreach ($list as $katId => $kat) {
 
-            foreach ($kat['bulan'] as $bulan => $val) {
-                $grandSaldo['bulan'][$bulan] += $val;
-                $grandSaldo['total'] += $val;
+                foreach ($kat['bulan'] as $bulan => $val) {
+                    $grandSaldo['bulan'][$bulan] += $val;
+                    $grandSaldo['total'] += $val;
+                }
             }
         }
-
-        // return compact('data','saldo');
 
         return view('laporan.cash-flow', compact('data','saldo','grandMasuk','grandKeluar','grandSaldo'));
     }
