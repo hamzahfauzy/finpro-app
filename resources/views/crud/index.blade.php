@@ -28,7 +28,7 @@
             <div class="bg-white shadow-sm sm:rounded-lg border border-gray-200">
                 <div class="flex flex-col">
                     <div class="overflow-x-auto">
-                        <table class="min-w-max table-auto divide-y divide-gray-200 table-fixed">
+                        <table class="table-auto divide-y divide-gray-200 table-fixed">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-4 text-start text-xs font-semibold text-gray-500 uppercase" style="width: 1%">
