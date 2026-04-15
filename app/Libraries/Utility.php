@@ -62,4 +62,16 @@ class Utility {
         }
     }
 
+    static function parseLinkAction($string, $data)
+    {
+        $data = $data->toArray();
+        foreach ($data as $key => $value) {
+            if(!is_array($value))
+            {
+                $string = str_replace('{' . $key . '}', $value, $string);
+            }
+        }
+        return $string;
+    }
+
 }

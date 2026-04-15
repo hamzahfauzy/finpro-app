@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KategoriPaket;
+use App\Models\Paket;
 use App\Models\Rekening;
 use App\Models\Transaksi;
 use App\Services\FinanceService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
@@ -382,10 +383,23 @@ class LaporanController extends Controller
     }
     
     function bukuBesar($id, FinanceService $finance){
+        $rekening = Rekening::find($id);
         $data = $finance->bukuBesarRekening($id);
 
-        return $data;
+        return view('laporan.buku-besar', compact('data','rekening'));
+    }
+    
+    function bukuBesarKategori($id, FinanceService $finance){
+        $kategori = KategoriPaket::find($id);
+        $data = $finance->bukuBesarKategori($id);
 
-        return view('laporan.buku-besar', compact('data'));
+        return view('laporan.buku-besar-kategori', compact('data','kategori'));
+    }
+    
+    function bukuBesarPaket($id, FinanceService $finance){
+        $paket = Paket::find($id);
+        $data = $finance->bukuBesarPaket($id);
+
+        return view('laporan.buku-besar-paket', compact('data','paket'));
     }
 }

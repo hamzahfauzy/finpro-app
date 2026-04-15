@@ -14,6 +14,12 @@ class RekeningController extends BaseCrudController
         $parent = parent::pageSetting();
 
         $parent['listTitle'] = 'Data Rekening';
+        $parent['additionalActions'] = [
+            [
+                'label' => 'Buku Besar',
+                'url' => '/laporan/buku-besar/{id}'
+            ]
+        ];
 
         return $parent;
     }

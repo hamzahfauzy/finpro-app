@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
             Route::get('saldo-kegiatan', [LaporanController::class, 'saldoKegiatan'])->name('saldo-kegiatan');
             Route::get('laporan-kegiatan', [LaporanController::class, 'laporanKegiatan'])->name('laporan-kegiatan');
             Route::get('buku-besar/{id}', [LaporanController::class, 'bukuBesar'])->name('buku-besar');
+            Route::get('buku-besar-kategori/{id}', [LaporanController::class, 'bukuBesarKategori'])->name('buku-besar-kategori');
+            Route::get('buku-besar-paket/{id}', [LaporanController::class, 'bukuBesarPaket'])->name('buku-besar-paket');
         });
         
     });

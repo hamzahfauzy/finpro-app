@@ -56,6 +56,9 @@
                                     </td>
                                     @endforeach
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        @foreach ($page_setting['additionalActions'] as $action)
+                                        <a href="{{\App\Libraries\Utility::parseLinkAction($action['url'], $d)}}" class="text-indigo-600 hover:text-indigo-900 mr-4">{{$action['label']}}</a>
+                                        @endforeach
                                         <a href="{{route($page_setting['routePrefix'].'edit', $d->id)}}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
                                         <button class="text-red-600 hover:text-red-900" onclick="if(confirm('Apakah anda yakin akan menghapus data ini ?')){ formDelete{{$d->id}}.submit() }">Hapus</button>
                                         <form name="formDelete{{$d->id}}" action="{{route($page_setting['routePrefix'].'destroy', $d->id)}}" method="post">

@@ -45,7 +45,7 @@ class Paket extends Model
 
     public $listColumns = [
         'perusahaan.nama' => 'Perusahaan',
-        'nama' => 'Nama',
+        // 'nama' => 'Nama',
         'nama_ringkas' => 'Nama Ringkas',
         'kategori.nama' => 'Kategori',
         'nilai_proyek' => [

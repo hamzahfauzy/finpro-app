@@ -14,6 +14,12 @@ class PaketController extends BaseCrudController
         $parent = parent::pageSetting();
 
         $parent['listTitle'] = 'Data Paket';
+        $parent['additionalActions'] = [
+            [
+                'label' => 'Buku Besar',
+                'url' => '/laporan/buku-besar-paket/{id}'
+            ]
+        ];
 
         return $parent;
     }

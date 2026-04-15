@@ -25,7 +25,8 @@ class BaseCrudController extends Controller {
             'deleteButton' => true,
             'editTitle' => 'Edit Data',
             'detailTitle' => 'Detail Data',
-            'routePrefix' => $this->routePrefix
+            'routePrefix' => $this->routePrefix,
+            'additionalActions' => []
         ];
     }
 

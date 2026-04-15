@@ -136,9 +136,12 @@ class FinanceService
                 'deskripsi',
                 'kategori',
                 'tipe_transaksi',
-                'jumlah'
+                'jumlah',
+                DB::raw('paket.nama_ringkas as nama_paket')
             )
-            ->orderBy('tanggal', 'asc')
+            ->leftJoin('paket', 'paket.id', '=', 'transaksi.id_paket')
+            ->orderBy('transaksi.tanggal', 'asc')
+            ->whereNotIn('kategori', ['kewajiban'])
             ->orderBy('transaksi.id', 'asc');
 
         $data = $query->get();
@@ -148,21 +151,103 @@ class FinanceService
         // Hitung saldo berjalan
         $result = $data->map(function ($item) use (&$saldo) {
 
-            $nilai = 0;
+            $nilai = $item->tipe_transaksi === 'masuk' ? $item->jumlah : -$item->jumlah;
 
             // 🔥 LOGIC UTAMA (ANTI DOUBLE TRANSFER)
-            if ($item->kategori === 'modal') {
-                $nilai = $item->jumlah;
-            } elseif ($item->kategori === 'transfer') {
-                // transfer tetap mempengaruhi rekening
-                $nilai = $item->tipe_transaksi === 'masuk'
-                    ? $item->jumlah
-                    : -$item->jumlah;
-            } else {
-                $nilai = $item->tipe_transaksi === 'masuk'
-                    ? $item->jumlah
-                    : -$item->jumlah;
-            }
+            // if ($item->kategori === 'modal') {
+            //     $nilai = $item->jumlah;
+            // } elseif ($item->kategori === 'transfer') {
+            //     // transfer tetap mempengaruhi rekening
+            //     $nilai = $item->tipe_transaksi === 'masuk'
+            //         ? $item->jumlah
+            //         : -$item->jumlah;
+            // } else {
+            //     $nilai = $item->tipe_transaksi === 'masuk'
+            //         ? $item->jumlah
+            //         : -$item->jumlah;
+            // }
+
+            $saldo += $nilai;
+
+            $item->debit = $item->tipe_transaksi === 'masuk' ? $item->jumlah : 0;
+            $item->kredit = $item->tipe_transaksi === 'keluar' ? $item->jumlah : 0;
+            $item->saldo = $saldo;
+
+            return $item;
+        });
+
+        return $result;
+    }
+
+    public function bukuBesarKategori($idKategori, $filters = [])
+    {
+        $query = $this->baseQuery($filters)
+            ->select(
+                'transaksi.id',
+                'tanggal',
+                'deskripsi',
+                'kategori',
+                'tipe_transaksi',
+                'jumlah',
+                DB::raw('paket.nama_ringkas as nama_paket'),
+                DB::raw('rekening.nama as nama_rekening')
+            )
+            ->leftJoin('paket', 'paket.id', '=', 'transaksi.id_paket')
+            ->leftJoin('rekening', 'rekening.id', '=', 'transaksi.id_rekening')
+            ->orderBy('transaksi.tanggal', 'asc')
+            ->whereNotIn('kategori', ['kewajiban'])
+            ->where('paket.id_kategori', $idKategori)
+            ->orderBy('transaksi.id', 'asc');
+
+        $data = $query->get();
+
+        $saldo = 0;
+
+        // Hitung saldo berjalan
+        $result = $data->map(function ($item) use (&$saldo) {
+
+            $nilai = $item->tipe_transaksi === 'masuk' ? $item->jumlah : -$item->jumlah;
+
+            $saldo += $nilai;
+
+            $item->debit = $item->tipe_transaksi === 'masuk' ? $item->jumlah : 0;
+            $item->kredit = $item->tipe_transaksi === 'keluar' ? $item->jumlah : 0;
+            $item->saldo = $saldo;
+
+            return $item;
+        });
+
+        return $result;
+    }
+
+    public function bukuBesarPaket($idPaket, $filters = [])
+    {
+        $query = $this->baseQuery($filters)
+            ->select(
+                'transaksi.id',
+                'tanggal',
+                'deskripsi',
+                'kategori',
+                'tipe_transaksi',
+                'jumlah',
+                DB::raw('paket.nama_ringkas as nama_paket'),
+                DB::raw('rekening.nama as nama_rekening')
+            )
+            ->leftJoin('paket', 'paket.id', '=', 'transaksi.id_paket')
+            ->leftJoin('rekening', 'rekening.id', '=', 'transaksi.id_rekening')
+            ->orderBy('transaksi.tanggal', 'asc')
+            ->whereNotIn('kategori', ['kewajiban'])
+            ->where('paket.id', $idPaket)
+            ->orderBy('transaksi.id', 'asc');
+
+        $data = $query->get();
+
+        $saldo = 0;
+
+        // Hitung saldo berjalan
+        $result = $data->map(function ($item) use (&$saldo) {
+
+            $nilai = $item->tipe_transaksi === 'masuk' ? $item->jumlah : -$item->jumlah;
 
             $saldo += $nilai;
 
