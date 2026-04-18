@@ -118,13 +118,12 @@
 
             @foreach(config('menu') as $menu)
                 @if(isset($menu['children']))
-                    <div x-data="{ openSub: false }" class="border-b">
+                    <div x-data="{ openSub: false }" class="{{ request()->routeIs($menu['routePrefix'].'*') ? 'block w-full border-l-4 border-indigo-400 text-start text-base font-medium text-indigo-700 bg-indigo-50 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700 transition duration-150 ease-in-out' : ''}}">
 
                         <!-- Parent -->
                         <button 
                             @click="openSub = !openSub"
                             class="w-full flex justify-between items-center px-4 py-2 text-left text-gray-700"
-                            :active="request()->routeIs($child['routePrefix'].'*')"
                         >
                             {{ __($menu['label']) }}
                             <span x-text="openSub ? '-' : '+'"></span>
