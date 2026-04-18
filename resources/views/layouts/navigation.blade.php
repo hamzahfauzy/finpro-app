@@ -20,12 +20,13 @@
                     @if(isset($menu['children']))
                     <div x-data="{ open: false }" class="inline-flex items-center {{ request()->routeIs($menu['routePrefix'].'*') ? "border-b-2 border-indigo-400" : ''}}">
 
-                        <div class="relative">
+                        <div class="relative" style="height: 100%">
                             <!-- Trigger -->
                             <button 
                                 @click="open = !open"
                                 @click.outside="open = false"
                                 class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
+                                style="height: 100%"
                             >
                                 {{ __($menu['label']) }}
     
@@ -38,7 +39,7 @@
                             <div 
                                 x-show="open"
                                 x-transition
-                                class="absolute left-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50"
+                                class="absolute left-0 w-48 bg-white border rounded-md shadow-lg z-50"
                             >
                                 @foreach($menu['children'] as $children)
                                     <a 
@@ -116,9 +117,40 @@
             </x-responsive-nav-link>
 
             @foreach(config('menu') as $menu)
-            <x-responsive-nav-link :href="route($menu['route'])" :active="request()->routeIs($menu['route'])">
-                {{ __($menu['label']) }}
-            </x-responsive-nav-link>
+                @if(isset($menu['children']))
+                    <div x-data="{ openSub: false }" class="border-b">
+
+                        <!-- Parent -->
+                        <button 
+                            @click="openSub = !openSub"
+                            class="w-full flex justify-between items-center px-4 py-2 text-left text-gray-700"
+                            :active="request()->routeIs($child['routePrefix'].'*')"
+                        >
+                            {{ __($menu['label']) }}
+                            <span x-text="openSub ? '-' : '+'"></span>
+                        </button>
+
+                        <!-- Children -->
+                        <div x-show="openSub" x-transition class="pl-4">
+                            @foreach($menu['children'] as $child)
+                                <x-responsive-nav-link 
+                                    :href="route($child['route'])"
+                                >
+                                    {{ __($child['label']) }}
+                                </x-responsive-nav-link>
+                            @endforeach
+                        </div>
+
+                    </div>
+                @else
+                    <x-responsive-nav-link 
+                        :href="route($menu['route'])" 
+                        :active="request()->routeIs($menu['routePrefix'].'*')"
+                    >
+                        {{ __($menu['label']) }}
+                    </x-responsive-nav-link>
+                @endif
+
             @endforeach
         </div>
 

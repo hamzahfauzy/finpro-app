@@ -15,23 +15,28 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
             .whitespace-nowrap { white-space: nowrap; }
+            .sticky-header {
+                position: sticky; top: 0; z-index: 999;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+            <div class="sticky-header">
+                @include('layouts.navigation')
+    
+                <!-- Page Heading -->
+                @isset($header)
+                    <header class="bg-white shadow">
+                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                @endisset
+            </div>
 
             <!-- Page Content -->
-            <main>
+            <main class="p-4">
                 {{ $slot }}
             </main>
         </div>
