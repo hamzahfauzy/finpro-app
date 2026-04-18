@@ -32,10 +32,10 @@ class Rekening extends Model
                 'induk' => 'Induk',
             ]
         ],
-        'saldo' => [
-            'label' => 'Saldo',
-            'type' => 'number'
-        ],
+        // 'saldo' => [
+        //     'label' => 'Saldo',
+        //     'type' => 'number'
+        // ],
         'nomor_rekening' => [
             'label' => 'Nomor Rekening',
             'type' => 'text'
@@ -52,7 +52,7 @@ class Rekening extends Model
         'nomor_rekening' => 'No. Rekening',
         'nama_rekening' => 'Nama Rekening',
         'tipe' => 'Tipe',
-        'saldo' => 'Saldo'
+        // 'saldo' => 'Saldo'
     ];
 
     public function perusahaan()

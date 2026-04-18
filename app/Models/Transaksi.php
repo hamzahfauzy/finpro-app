@@ -24,7 +24,7 @@ class Transaksi extends Model
             'type' => 'select',
             'relation' => \App\Models\Rekening::class,
             'display' => 'nama',
-            'depends_on' => 'id_perusahaan', // 🔥 kunci
+            'depends_on' => 'id_perusahaan',
             'foreign_key' => 'id_perusahaan'
         ],
         'id_paket' => [
@@ -87,6 +87,7 @@ class Transaksi extends Model
         'kategori' => 'Kategori',
         'tipe_transaksi' => 'Tipe',
         'deskripsi' => 'Deskripsi',
+        'kode_batch' => 'Batch',
     ];
 
     public function perusahaan()

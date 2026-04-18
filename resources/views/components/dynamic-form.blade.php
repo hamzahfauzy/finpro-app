@@ -64,6 +64,25 @@
 
                         {{-- 🔹 CHILD (dependent) --}}
                         {{-- kosong dulu, nanti diisi via JS --}}
+                        @if($isDependent && old($field['depends_on'], $data?->{$field['depends_on']}))
+                            @php
+                                $model = $field['relation'];
+                                $foreignKey = $field['foreign_key'];
+
+                                $parentValue = old($field['depends_on'], $data?->{$field['depends_on']});
+
+                                $items = $model::where($foreignKey, $parentValue)->get();
+                            @endphp
+
+                            @foreach($items as $item)
+                                <option 
+                                    value="{{ $item->id }}"
+                                    {{ old($key, $data?->$key) == $item->id ? 'selected' : '' }}
+                                >
+                                    {{ $item->{$field['display']} }}
+                                </option>
+                            @endforeach
+                        @endif
                     @endif
 
                     {{-- STATIC OPTIONS --}}

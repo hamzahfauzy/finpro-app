@@ -41,7 +41,7 @@ class BaseCrudController extends Controller {
     {
         //
         $model = $this->getModel();
-        $data = $model->get();
+        $data = $model->paginate(20);
         return view($this->viewPath.'index', compact('data','model'));
     }
 

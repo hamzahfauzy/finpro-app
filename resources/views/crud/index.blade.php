@@ -78,6 +78,9 @@
                     </div>
                 </div>
             </div>
+            <div class="mt-3">
+                {{$data->links()}}
+            </div>
         </div>
     </div>
 </x-app-layout>

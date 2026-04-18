@@ -22,6 +22,17 @@ class TransaksiController extends BaseCrudController
         return $parent;
     }
 
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+        $model = $this->getModel();
+        $data = $model->orderBy('tanggal','desc')->paginate(20);
+        return view($this->viewPath.'index', compact('data','model'));
+    }
+
     public function kmk()
     {
         $title = "Transaksi KMK";
@@ -221,6 +232,20 @@ class TransaksiController extends BaseCrudController
         $payload['id_perusahaan'] = null;
         $additionalTransactions = [];
 
+        $prefixKodeBatch = 'TRX-' . now()->format('Ymd') . '-';
+        $lastTransaksi = Transaksi::where('kode_batch', 'LIKE', $prefixKodeBatch . '%')
+            ->orderByDesc('kode_batch')
+            ->first();
+
+        $lastNumber = 0;
+        if ($lastTransaksi) {
+            $pecah = explode('-', $lastTransaksi->kode_batch);
+            $lastNumber = (int) end($pecah);
+        }
+
+        $nextNumber = $lastNumber + 1;
+        $payload['kode_batch'] = $prefixKodeBatch . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        
         if(isset($payload['id_paket']))
         {
             $paket = Paket::find($payload['id_paket']);
