@@ -227,7 +227,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($saldo as $tipe => $listKategori)
+                            @forelse($saldo ?? [] as $tipe => $listKategori)
                                 @foreach ($listKategori as $kategori)
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap">
