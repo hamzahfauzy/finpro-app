@@ -42,7 +42,7 @@ class TransaksiController extends BaseCrudController
                 'label' => 'Paket',
                 'type' => 'select',
                 'relation' => \App\Models\Paket::class,
-                'display' => 'nama',
+                'display' => 'nama_ringkas',
             ],
             'id_rekening' => [
                 'label' => 'Rekening',
@@ -116,7 +116,7 @@ class TransaksiController extends BaseCrudController
                 'label' => 'Paket',
                 'type' => 'select',
                 'relation' => \App\Models\Paket::class,
-                'display' => 'nama',
+                'display' => 'nama_ringkas',
             ],
             'rekening_modal' => [
                 'label' => 'Asal Rekening',
@@ -156,7 +156,7 @@ class TransaksiController extends BaseCrudController
                 'label' => 'Paket',
                 'type' => 'select',
                 'relation' => \App\Models\Paket::class,
-                'display' => 'nama',
+                'display' => 'nama_ringkas',
             ],
             'id_rekening' => [
                 'label' => 'Rekening',
@@ -200,7 +200,7 @@ class TransaksiController extends BaseCrudController
                 'label' => 'Paket',
                 'type' => 'select',
                 'relation' => \App\Models\Paket::class,
-                'display' => 'nama',
+                'display' => 'nama_ringkas',
             ],
             'id_rekening' => [
                 'label' => 'Rekening',
