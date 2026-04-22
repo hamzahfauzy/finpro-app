@@ -329,38 +329,33 @@ class TransaksiController extends BaseCrudController
         if($request->tipe == 'pendapatan')
         {
             $payload['tipe_transaksi'] = 'masuk';
-            $jumlah_potongan = $payload['potongan_kmk'];
+            $jumlah_potongan = $payload['potongan_kmk'] ?? 0;
             $target_rekening = $payload['target_rekening'];
             unset($payload['target_rekening']);
             unset($payload['potongan_kmk']);
 
-            if($jumlah_potongan > 0)
-            {
-
-                $additionalTransactions = [
-                    [
-                        ...$payload,
-                        'jumlah' => $jumlah_potongan,
-                        'tipe_transaksi' => 'keluar',
-                        'kategori' => 'kmk'
-                    ],
-                    [
-                        ...$payload,
-                        'id_rekening' => $payload['id_rekening'],
-                        'jumlah' => $payload['jumlah'] - $jumlah_potongan,
-                        'tipe_transaksi' => 'keluar',
-                        'kategori' => 'transfer'
-                    ],
-                    [
-                        ...$payload,
-                        'id_rekening' => $target_rekening,
-                        'jumlah' => $payload['jumlah'] - $jumlah_potongan,
-                        'tipe_transaksi' => 'masuk',
-                        'kategori' => 'transfer'
-                    ]
-                ];
-                
-            }
+            $additionalTransactions = [
+                [
+                    ...$payload,
+                    'jumlah' => $jumlah_potongan,
+                    'tipe_transaksi' => 'keluar',
+                    'kategori' => 'kmk'
+                ],
+                [
+                    ...$payload,
+                    'id_rekening' => $payload['id_rekening'],
+                    'jumlah' => $payload['jumlah'] - $jumlah_potongan,
+                    'tipe_transaksi' => 'keluar',
+                    'kategori' => 'transfer'
+                ],
+                [
+                    ...$payload,
+                    'id_rekening' => $target_rekening,
+                    'jumlah' => $payload['jumlah'] - $jumlah_potongan,
+                    'tipe_transaksi' => 'masuk',
+                    'kategori' => 'transfer'
+                ]
+            ];
         }
 
         if($request->tipe == 'kewajiban')
