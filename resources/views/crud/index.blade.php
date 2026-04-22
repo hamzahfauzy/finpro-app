@@ -48,7 +48,7 @@
                                 @forelse($data as $index => $d)
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{ $index+1 }}
+                                        {{ $data->firstItem() + $index }}
                                     </td>
                                     @foreach ($model->listColumns as $key => $label)
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
