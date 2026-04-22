@@ -55,7 +55,9 @@ class Utility {
                 return $value ? 'Ya' : 'Tidak';
 
             case 'badge':
-                return "<span class='px-2 py-1 rounded bg-gray-200'>{$value}</span>";
+                $color = $config['badge']['color'][$value] ?? 'bg-gray-200';
+                $label = $config['badge']['label'][$value];
+                return "<span class='px-2 py-1 rounded $color'>{$label}</span>";
 
             default:
                 return $value ?? '-';

@@ -57,7 +57,7 @@ return [
                 'routePrefix' => 'transaksi.'
             ],
             [
-                'label' => 'Kewajiban',
+                'label' => 'Biaya',
                 'route' => 'transaksi.kewajiban',
                 'routePrefix' => 'transaksi.'
             ],

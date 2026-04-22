@@ -48,7 +48,7 @@ class Transaksi extends Model
             'type' => 'select',
             'options' => [
                 'modal' => 'Modal',
-                'kewajiban' => 'Kewajiban',
+                'kewajiban' => 'Biaya',
                 'pendapatan' => 'Pendapatan',
                 'transfer' => 'Transfer',
                 'kmk' => 'KMK',
@@ -84,7 +84,26 @@ class Transaksi extends Model
             'label' => 'Jumlah',
             'type' => 'currency'
         ],
-        'kategori' => 'Kategori',
+        'kategori' => [
+            'label' => 'Kategori',
+            'type'  => 'badge',
+            'badge' => [
+                'label' => [
+                    'modal' => 'Modal',
+                    'kewajiban' => 'Biaya',
+                    'pendapatan' => 'Pendapatan',
+                    'transfer' => 'Transfer',
+                    'kmk' => 'KMK',
+                ],
+                'color' => [
+                    'modal' => 'bg-gray-200',
+                    'kewajiban' => 'bg-gray-200',
+                    'pendapatan' => 'bg-gray-200',
+                    'transfer' => 'bg-gray-200',
+                    'kmk' => 'bg-gray-200',
+                ]
+            ]
+        ],
         'tipe_transaksi' => 'Tipe',
         'deskripsi' => 'Deskripsi',
         'kode_batch' => 'Batch',

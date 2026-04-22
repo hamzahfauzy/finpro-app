@@ -29,7 +29,7 @@ class TransaksiController extends BaseCrudController
     {
         //
         $model = $this->getModel();
-        $data = $model->orderBy('tanggal','desc')->paginate(20);
+        $data = $model->orderBy('tanggal','desc')->orderBy('id','desc')->paginate(20);
         return view($this->viewPath.'index', compact('data','model'));
     }
 
@@ -193,7 +193,7 @@ class TransaksiController extends BaseCrudController
     
     public function kewajiban()
     {
-        $title = "Transaksi Kewajiban";
+        $title = "Transaksi Biaya";
         $tipe = "kewajiban";
         $fields = [
             'id_paket' => [
