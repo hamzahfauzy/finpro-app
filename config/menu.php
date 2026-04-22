@@ -41,11 +41,11 @@ return [
                 'route' => 'transaksi.kmk',
                 'routePrefix' => 'transaksi.'
             ],
-            // [
-            //     'label' => 'Transfer',
-            //     'route' => 'transaksi.transfer',
-            //     'routePrefix' => 'transaksi.'
-            // ],
+            [
+                'label' => 'Transfer',
+                'route' => 'transaksi.transfer',
+                'routePrefix' => 'transaksi.'
+            ],
             [
                 'label' => 'Modal',
                 'route' => 'transaksi.modal',
