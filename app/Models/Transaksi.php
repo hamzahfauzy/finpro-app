@@ -66,14 +66,14 @@ class Transaksi extends Model
             'label' => 'Tanggal',
             'type' => 'date'
         ],
-        'tipe_arus' => [
-            'label' => 'Tipe Arus',
-            'type' => 'select',
-            'options' => [
-                'kas' => 'Kas',
-                'paket' => 'Paket'
-            ]
-        ],
+        // 'tipe_arus' => [
+        //     'label' => 'Tipe Arus',
+        //     'type' => 'select',
+        //     'options' => [
+        //         'kas' => 'Kas',
+        //         'paket' => 'Paket'
+        //     ]
+        // ],
     ];
 
     public $listColumns = [

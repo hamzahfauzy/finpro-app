@@ -17,7 +17,7 @@ class TransaksiController extends BaseCrudController
         $parent = parent::pageSetting();
 
         $parent['listTitle'] = 'Data Transaksi';
-        $parent['createButton'] = false;
+        // $parent['createButton'] = false;
 
         return $parent;
     }
