@@ -52,7 +52,7 @@
                                     </td>
                                     @foreach ($model->listColumns as $key => $label)
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{ \App\Libraries\Utility::parseValue($d, $key, $label) }}
+                                        {!! \App\Libraries\Utility::parseValue($d, $key, $label) !!}
                                     </td>
                                     @endforeach
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
