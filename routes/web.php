@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
             Route::get('kewajiban', [TransaksiController::class, 'kewajiban'])->name('kewajiban');
 
             Route::post('save', [TransaksiController::class, 'save'])->name('save');
-            Route::put('update', [TransaksiController::class, 'update'])->name('update');
+            // Route::put('{id}', [TransaksiController::class, 'update'])->name('update');
         });
 
         Route::resource('transaksi', TransaksiController::class);
