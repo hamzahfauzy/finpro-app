@@ -329,7 +329,7 @@ class TransaksiController extends BaseCrudController
         if($request->tipe == 'pendapatan')
         {
             $payload['tipe_transaksi'] = 'masuk';
-            if($payload['potongan_kmk'])
+            if($payload['potongan_kmk'] && !empty($payload['potongan_kmk']))
             {
                 $jumlah_potongan = $payload['potongan_kmk'];
                 $target_rekening = $payload['target_rekening'];
