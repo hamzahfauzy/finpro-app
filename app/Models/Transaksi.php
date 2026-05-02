@@ -77,7 +77,11 @@ class Transaksi extends Model
     ];
 
     public $listColumns = [
-        'tanggal' => 'Tanggal',
+        'tanggal' => [
+            'label' => 'Tanggal',
+            'type' => 'date',
+            'format' => 'd/m/Y'
+        ],
         'perusahaan.nama' => 'Perusahaan',
         'rekening.nama' => 'Rekening',
         'jumlah' => [

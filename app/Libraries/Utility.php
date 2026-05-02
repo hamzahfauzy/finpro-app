@@ -42,8 +42,9 @@ class Utility {
                 return number_format($value ?? 0, 0, ',', '.');
 
             case 'date':
+                $format = $config['format'] ?? 'Y-m-d';
                 return $value 
-                    ? \Carbon\Carbon::parse($value)->format('d-m-Y')
+                    ? \Carbon\Carbon::parse($value)->format($format)
                     : '-';
 
             case 'datetime':
